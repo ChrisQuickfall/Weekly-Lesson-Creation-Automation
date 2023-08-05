@@ -6,5 +6,4 @@ What will you need?
  - An installation of R
  - An xlsx timetable with four columns: week, day, period, and lesson. Each row of the timetable should correspond to one lesson. 
  - A pptx lesson template.
- - A file structure where archived lessons can be placed.
-Examples of a timetable file, lesson template, and file structure are all included in the repository.
+Examples of a timetable file and lesson template are included in the repository.
