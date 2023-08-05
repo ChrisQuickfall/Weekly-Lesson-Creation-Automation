@@ -26,22 +26,38 @@ archive_folder_name <- "2022-2023"
 ### EDITABLE INPUTS
 
 lesson_template_name <- "Lesson Slide Template.pptx"
-
+timetable_name <- "Timetable.xlsx"
 
 ### PROGRAM
 
-# generates folder names from your main folder
-
-target_folder <- paste0(active_folder, "//This Week//")
-archive_folder <- paste0(active_folder, "//Archive//", archive_folder_name, "//")
-lesson_template_file_location <- paste0(active_folder, "//Templates//", lesson_template_name)
-
-
 # import timetable
-timetable <- read.xlsx("C://Chris//Teaching//Timetable.xlsx") %>% 
+
+timetable <- read.xlsx(timetable_name) %>% 
   rename(Week = 1) %>% 
   filter(Week == week)
 
+
+# generates folder names from your main folder
+
+setwd(active_folder)
+
+target_folder <- paste0("This Week//")
+archive_folder <- paste0("Archive//", archive_folder_name, "//")
+
+
+# Creates folders if not present
+
+suppressWarnings({
+  dir.create("This Week")
+  
+  # creates your set of archival folders, organised by class
+  cidr <- getwd()
+  for(xxx in unique(timetable[,4])){
+    mkfldr <- paste0("Archive/", archive_folder_name, "/", xxx)
+    dir.create(file.path(cidr, mkfldr), recursive = TRUE)
+  }
+  
+})
 
 
 
@@ -52,7 +68,7 @@ for(xxx in unique(timetable[,4])){
   powerpoints_to_archive <- lw_powerpoints[str_detect(lw_powerpoints,paste0(xxx,".pptx"))]
   for(yyy in powerpoints_to_archive){
     date_check <- yyy %>% str_sub(1, 10) %>% as.Date() # check that they're past lessons!
-    if(date_check < Sys.Date()+9){
+    if(date_check < Sys.Date()){
       file.rename(from = paste0(target_folder,"//",yyy),
                   to = paste0(archive_folder,"//",xxx,"//",yyy))
     }}}
@@ -71,7 +87,7 @@ nextweekday <- function(date, wday) {
 # create this week's pptx files
 
 for(xxx in 1:nrow(timetable)){
-  file.copy(lesson_template_file_location, target_folder)
+  file.copy(lesson_template_name, target_folder)
   file.rename(paste0(target_folder, "//", lesson_template_name),
               paste0(target_folder, "//", nextweekday(Sys.Date(), timetable[xxx,2]+2),
                      " P", timetable[xxx,3], " ", timetable[xxx,4], ".pptx"))
