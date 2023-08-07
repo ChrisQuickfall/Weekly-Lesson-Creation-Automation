@@ -1,5 +1,5 @@
 # Weekly-Lesson-Creation-Automation
-This project allows a teacher to generate a set of lesson templates for their week with file names that aid organisation. It also archives lessons from previous days.
+This project allows a teacher to generate a set of lesson templates for their week with file names that aid organisation. It also automatically archives lessons from previous days in a sensible file structure.
 
 
 What will you need?
